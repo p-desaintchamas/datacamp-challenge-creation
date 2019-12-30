@@ -7,22 +7,22 @@ from rampwf.score_types.base import BaseScoreType
 from sklearn.model_selection import GroupShuffleSplit
 
 
-problem_title = 'Prediction of annual revenue using FAN'
-_target_column_name = 'Revenue' 
+problem_title = 'Prediction of daily validation in Paris public underground transports'
+_target_column_name = 'NB_VALD'
 # A type (class) which will be used to create wrapper objects for y_pred
 Predictions = rw.prediction_types.make_regression()
 # An object implementing the workflow
 
-class FAN(FeatureExtractorRegressor):
+class VALID(FeatureExtractorRegressor):
     def __init__(self, workflow_element_names=[
-            'feature_extractor', 'regressor', 'award_notices_RAMP.csv']):
-        super(FAN, self).__init__(workflow_element_names[:2])
+            'feature_extractor', 'regressor']):  #, 'award_notices_RAMP.csv']):
+        super(VALID, self).__init__(workflow_element_names[:2])
         self.element_names = workflow_element_names
 
-workflow = FAN()
+workflow = VALID()
 
-# define the score (specific score for the FAN problem)
-class FAN_error(BaseScoreType):
+# define the score (specific score for the VALID problem)
+class VALID_error(BaseScoreType):
     is_lower_the_better = True
     minimum = 0.0
     maximum = float('inf')
@@ -37,18 +37,18 @@ class FAN_error(BaseScoreType):
 
         max_true = np.maximum(5., np.log10(np.maximum(1., y_true)))
         max_pred = np.maximum(5., np.log10(np.maximum(1., y_pred)))
-        
+
         loss = np.mean(np.abs(max_true - max_pred))
-        
+
         return loss
 
 score_types = [
-    FAN_error(name='ratp error', precision=2),
+    VALID_error(name='ratp error', precision=2),
 ]
 
 def get_cv(X, y):
     cv = GroupShuffleSplit(n_splits=8, test_size=0.20, random_state=42)
-    return cv.split(X,y, groups=X['Legal_ID'])
+    return cv.split(X,y, groups=X['LIBELLE_ARRET'])
 
 def _read_data(path, f_name):
     data = pd.read_csv(os.path.join(path, 'data', f_name), low_memory=False,
