@@ -36,7 +36,7 @@ class FeatureExtractor(object):
             X.loc[X['NB_VALD'] == 'Moins de 5', 'NB_VALD'] = 5
             X['NB_VALD'] = pd.to_numeric(X['NB_VALD'])
             
-            return X['NB_VALD'].values[:, np.newaxis]
+            return X
         nb_vald_transformer = FunctionTransformer(nb_vald, validate=False)
 
         
@@ -44,7 +44,7 @@ class FeatureExtractor(object):
         def process_jour(X):
             X['JOUR'] = X['JOUR'].astype(str)
             X = pd.DataFrame(X.groupby(["JOUR","LIBELLE_ARRET"])['NB_VALD'].sum().reset_index())
-            return X['JOUR'].values[:, np.newaxis]
+            return X
         jour_transformer = FunctionTransformer(process_jour, validate=False)
 
         
@@ -76,7 +76,7 @@ class FeatureExtractor(object):
             dt_agg_pos.drop('Name',axis=1,inplace=True)
 
 
-            return dt_agg_pos[['lon', 'lat']]
+            return dt_agg_pos
         merge_pos_transformer = FunctionTransformer(merge_pos, validate=False)
         
         def merge_corr(X):
@@ -96,7 +96,7 @@ class FeatureExtractor(object):
             dt_agg_pos_corr.drop(['Name','stop_name'],axis=1,inplace=True)
 
 
-            return dt_agg_pos_corr[['nb_rer', 'nb_metro']]
+            return dt_agg_pos_corr
         merge_corr_transformer = FunctionTransformer(merge_corr, validate=False)
         
         
@@ -127,7 +127,7 @@ class FeatureExtractor(object):
             dt_pos_cor_inc.drop(['Name','day','line_num','stop_name'],axis=1,inplace=True)
             dt_pos_cor_inc.loc[dt_pos_cor_inc['num_inc'].notna()]
 
-            return dt_pos_cor_inc[['duree','type_inc','num_inc']]
+            return dt_pos_cor_inc
         merge_incident_transformer = FunctionTransformer(merge_incident, validate=False)
         
          def merge_jour_ferier(X):
@@ -156,8 +156,47 @@ class FeatureExtractor(object):
 
            
 
-            return df_merged[['est_jour_ferie','type_jour']]
+            return df_merged
         merge_ferier_transformer = FunctionTransformer(merge_jour_ferier, validate=False)
+       
+        def merge_ref(X):
+            ref = pd.read_csv('data/referentiel-gares-voyageurs.csv',delimiter = ';')
+            ref  = ref[['Intitulé gare','Segment DRG','Nbre plateformes']]
+            ref['Intitulé gare'] = ref['Intitulé gare'].apply(lambda x : x.upper())
+            
+            dt_ref = pd.merge(X,ref,left_on='LIBELLE_ARRET',right_on='Intitulé gare',how = 'left') 
+            dt_ref = dt_ref.drop(columns = ['Intitulé gare'],axis=1)
+            return df_ref
+        merge_ref_transformer = FunctionTransformer(merge_ref, validate=False)
+        
+        def merge_mvt_so(X):
+            mvs = pd.read_csv('data/mouvements-sociaux.csv',delimiter=';')
+            mvs['date_de_debut'] = pd.to_datetime(mvs['date_de_debut'],format="%Y/%m/%d")
+            mvs['date_de_fin'] = pd.to_datetime(mvs['date_de_fin'],format="%Y/%m/%d")
+            mvs  = mvs[mvs['date_de_debut'].isin(pd.date_range(start='20150101', end='20190630'))]
+            mvs_dates = mvs[['date_de_debut','date_de_fin']]
+            
+            list_dates = []
+            for index in mvs_dates.index:
+                start_date = mvs_dates['date_de_debut'][index]
+                if  not pd.isna(mvs_dates['date_de_fin'][index]): 
+                    end_date = mvs_dates['date_de_fin'][index]
+                    for n in range(int ((end_date - start_date).days)):
+                        list_dates.append(start_date + timedelta(n))
+                else : 
+                    list_dates.append(start_date)
+                    
+            mvs_dates = {'date': list_dates}
+            mvs_dates = pd.DataFrame(data=mvs_dates)
+            mvs_dates['est_greve'] = np.ones(mvs_dates.shape[0])
+            
+            X['JOUR'] = pd.to_datetime(X['JOUR'])
+            df_merged = pd.merge(X,mvs_dates, left_on='JOUR',right_on='date',how='left')
+            df_merged = df_merged.drop(columns=['date'])
+            df_merged["est_greve"].fillna(0, inplace = True)
+            return df_merged
+        merge_mvt_so_transformer = FunctionTransformer(merge_mvt_so, validate=False)
+
 
         num_cols = ['NB_VALD','lon','lat','nb_rer','nb_metro','duree','num_inc','est_jour_ferie']
         nb_vald_col = ['NB_VALD']
@@ -167,6 +206,8 @@ class FeatureExtractor(object):
         merge_corr_col = ['Name']
         merge_incident_col = ['JOUR','Name']
         merge_jour_ferier_col = ['JOUR']
+        merge_ref_col = ['LIBELLE_ARRET']
+        merge__mvt_so = ['JOUR']
         
 
         preprocessor = ColumnTransformer(
@@ -187,7 +228,10 @@ class FeatureExtractor(object):
                  SimpleImputer(strategy='median')), merge_incident_col),
                 ('merge_jour_ferier', make_pipeline(merge_ferier_transformer,
                  SimpleImputer(strategy='median')), merge_jour_ferier_col),
-                
+                ('merge_ref', make_pipeline(merge_ref_transformer,
+                 SimpleImputer(strategy='median')), merge_ref_col),
+                ('merge_mvt_so', make_pipeline(merge_mvt_so_transformer,
+                 SimpleImputer(strategy='median')), merge_mvt_so_col),
                 
                 ])
 
