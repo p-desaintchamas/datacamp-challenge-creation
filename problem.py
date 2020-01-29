@@ -35,11 +35,11 @@ class VALID_error(BaseScoreType):
         if isinstance(y_true, pd.Series):
             y_true = y_true.values
 
-        max_true = np.maximum(5., np.log10(np.maximum(1., y_true)))
-        max_pred = np.maximum(5., np.log10(np.maximum(1., y_pred)))
+#         max_true = np.maximum(5., np.log10(np.maximum(1., y_true)))
+#         max_pred = np.maximum(5., np.log10(np.maximum(1., y_pred)))
 
-        loss = np.mean(np.abs(max_true - max_pred))
-
+#         loss = np.mean(np.abs(max_true - max_pred))
+        loss = np.sum(np.log(np.cosh(y_pred - y_true)))
         return loss
 
 score_types = [
@@ -58,9 +58,9 @@ def _read_data(path, f_name):
     return X_df, y_array
 
 def get_train_data(path='.'):
-    f_name = 'company_revenue_TRAIN.csv.zip'
+    f_name = 'ratp_validation_TRAIN.csv.zip'
     return _read_data(path, f_name)
 
 def get_test_data(path='.'):
-    f_name = 'company_revenue_TEST.csv.zip'
+    f_name = 'ratp_validation_TEST.csv.zip'
     return _read_data(path, f_name)
