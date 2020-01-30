@@ -46,15 +46,15 @@ def get_cv(X, y):
     return cv.split(X,y, groups=X['LIBELLE_ARRET'])
 
 def _read_data(path, f_name):
-    data = pd.read_csv(os.path.join(path, 'data', f_name), low_memory=False)
+    data = pd.read_csv(os.path.join(path, 'data/data challenge', f_name), low_memory=False)
     y_array = data[_target_column_name].values
     X_df = data.drop(_target_column_name, axis=1)
     return X_df, y_array
 
-def get_train_data(path='./data/data challenge'):
+def get_train_data(path='./'):
     f_name = 'data_challenge_TRAIN.csv'
     return _read_data(path, f_name)
 
-def get_test_data(path='./data/data challenge'):
+def get_test_data(path='./'):
     f_name = 'data_challenge_TEST.csv'
     return _read_data(path, f_name)
