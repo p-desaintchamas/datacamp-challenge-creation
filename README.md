@@ -28,8 +28,8 @@ Some python librairies should be installed before starting the challenge such as
 - Intall the ramp-workflow library
 
 ``` pip install git+https://github.com/paris-saclay-cds/ramp-workflow.git```
--  Modify the files regressor.py with your own regressor choosen and inluding all the data feature engineering that you have done in the feature_regressor.py put them in submissions/starting_kit folder.
-- Download the data via download_data.py file.
+-  Modify the file ``` regressor.py```  with your own regressor choosen and inluding all the data feature engineering that you have done in the ``` feature_extractor.py ``` put them in ``` submissions/starting_kit```  folder.
+- Download the data via ```  download_data.py```  file.
 - Test locally in the staring_kit.ipynb notebook with the python command:
 
 ``` ramp_test_submission --submission starting_kit```
