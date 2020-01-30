@@ -3,4 +3,6 @@ data/validation_data_agg_2015_2019.csv
 .DS_Store
 *.csv
 *.pdf
+*.zip
+*.rar
 
