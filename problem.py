@@ -5,6 +5,7 @@ import rampwf as rw
 from rampwf.workflows import FeatureExtractorRegressor
 from rampwf.score_types.base import BaseScoreType
 from sklearn.model_selection import GroupShuffleSplit
+from sklearn.metrics import mean_squared_error
 
 
 problem_title = 'Prediction of daily validation in Paris public underground transports'
@@ -27,14 +28,15 @@ class VALID_error(BaseScoreType):
     minimum = 0.0
     maximum = float('inf')
 
-    def __init__(self, name='ratp error', precision=2):
+    def __init__(self, name='ratp error', precision=3):
         self.name = name
         self.precision = precision
 
     def __call__(self, y_true, y_pred):
         if isinstance(y_true, pd.Series):
             y_true = y_true.values
-        loss = np.sum(np.log(np.cosh(y_pred - y_true)))
+        #loss = np.sum(np.log(np.cosh(y_pred - y_true)))
+        loss = mean_squared_error(y_true,y_pred)
         return loss
 
 score_types = [
