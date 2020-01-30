@@ -32,11 +32,11 @@ def download_file_from_gdrive(id, destination):
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) is not 3:
-        print("Usage: python google_drive.py drive_file_id destination_file_path")
+    if len(sys.argv) is not 1:
+        print("Usage: python download_data.py")
     else:
         # TAKE ID FROM SHAREABLE LINK
-        file_id = sys.argv[1]
+        file_id = '1iqM20DfTkBjWkUM19dREPZCi6LCLyr5R'
         # DESTINATION FILE ON YOUR DISK
-        destination = sys.argv[2]
-        download_file_from_google_drive(file_id, destination)
+        destination = './data/data_downloaded.csv'
+        download_file_from_gdrive(file_id, destination)
