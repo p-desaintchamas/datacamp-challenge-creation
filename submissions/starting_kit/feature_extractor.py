@@ -27,19 +27,21 @@ class FeatureExtractor(object):
 
 		date_cols = ['JOUR']
 		num_cols = ['lon','lat','nb_metro','nb_rer','principal','Nbre plateformes','num_inc','est_greve','est_jour_ferie']
-
+		drop_cols = ['duree', 'type_inc']
 
 
 		preprocessor = ColumnTransformer(
 			transformers=[
 				('date', make_pipeline(date_transformer,
 				SimpleImputer(strategy='median')), date_cols),
-				('num', numeric_transformer, num_cols)
+				('num', numeric_transformer, num_cols),
+				('drop cols', 'drop', drop_cols)
 				])
 
 		self.preprocessor = preprocessor
-		self.preprocessor.fit(X_df, y_array)
+		self.preprocessor.fit(X_encoded, y_array)
 		return self
 
 	def transform(self, X_df):
-		return self.preprocessor.transform(X_df)
+		X_encoded = X_df
+		return self.preprocessor.transform(X_encoded)
