@@ -4,7 +4,7 @@ Authors :Dina ABED , Siwar ABBES , Gwendal HENGOAT , Jules ZACCARDI , Mohamed Sk
 
 ## Introduction 
 
-Paris, as one of the largest European cities and a world center of art, fashion, gastronomy and culture, receives more than Paris welcomes around 1_ million tourist per year and it's an attractive economic destination fr workers which increase the number of its residents every year (about 12,21 million in 2019). 
+Paris, as one of the largest European cities and a world center of art, fashion, gastronomy and culture, receives  around 18 million tourist per year and it's an attractive economic destination for workers which increase the number of its residents every year (about 12,21 million in 2019). 
 All these factors makes the carriers operating public transport lines in Ile-de-France, such as RATP and SNCF, faces many challenges to manage all the transport traffic and to satisfy the passengers. 
 
 ## Challenge goal
