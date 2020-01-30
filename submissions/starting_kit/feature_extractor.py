@@ -27,7 +27,8 @@ class FeatureExtractor(object):
 
 		date_cols = ['JOUR']
 		num_cols = ['lon','lat','nb_metro','nb_rer','principal','Nbre plateformes','num_inc','est_greve','est_jour_ferie']
-		drop_cols = ['duree', 'type_inc']
+		drop_cols = ['duree', 'type_inc', 'res_com', 'mode_','line', 'Segment DRG', 'duree', 'type_inc', 'Jour de la semaine', 
+                     'Horaire en jour normal', 'Horaire en jour férié', 'type_jour']
 
 
 		preprocessor = ColumnTransformer(
