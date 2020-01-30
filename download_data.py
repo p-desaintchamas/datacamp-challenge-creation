@@ -36,7 +36,7 @@ if __name__ == "__main__":
         print("Usage: python download_data.py")
     else:
         # TAKE ID FROM SHAREABLE LINK
-        file_id = '1iqM20DfTkBjWkUM19dREPZCi6LCLyr5R'
+        file_id = '1jHVkvRu-G37tBuE6IFp-y0gi7d3hUm7E'
         # DESTINATION FILE ON YOUR DISK
-        destination = './data/data_downloaded.csv'
+        destination = './data/data_downloaded.zip'
         download_file_from_gdrive(file_id, destination)
