@@ -38,5 +38,5 @@ if __name__ == "__main__":
         # TAKE ID FROM SHAREABLE LINK
         file_id = '1jHVkvRu-G37tBuE6IFp-y0gi7d3hUm7E'
         # DESTINATION FILE ON YOUR DISK
-        destination = './data/data_downloaded.zip'
+        destination = './data.zip'
         download_file_from_gdrive(file_id, destination)
