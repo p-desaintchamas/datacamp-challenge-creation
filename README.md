@@ -1,5 +1,5 @@
 # RAMP starting kit : Prediction of daily validation in Paris public underground transports
-Authors :Dina ABED , Siwar ABBES , Gwendal HENGOAT , Jules ZACCARDI , Mohamed Skander HELLAL , Philippe de SAINT CHAMAS
+Authors : Dina ABED, Siwar ABBES, Philippe de SAINT CHAMAS, Mohamed Skander HELLAL, Gwendal HENGOAT , Jules ZACCARDI
 
 
 ## Introduction 
@@ -14,25 +14,25 @@ Open data is available to make this challenge feasible: Both SNCF and RATP websi
 
 ## Requirements
 Some python librairies should be installed before starting the challenge such as: 
-- numpy
-- pandas
-- seaborn
-- scikit-learn
-- matplolib
-- folium
-- calendar
-- datetime
-- IPythhon
+- `numpy`
+- `pandas`
+- `seaborn`
+- `scikit-learn`
+- `matplolib`
+- `folium`
+- `calendar`
+- `datetime`
+- `IPythhon`
 
 ## Setting
 - Intall the ramp-workflow library
 
 ``` pip install git+https://github.com/paris-saclay-cds/ramp-workflow.git```
--  Modify the file ``` regressor.py```  with your own regressor choosen and inluding all the data feature engineering that you have done in the ``` feature_extractor.py ``` put them in ``` submissions/starting_kit```  folder.
-- Download the data via ```  download_data.py```  file.
-- Test locally in the staring_kit.ipynb notebook with the python command:
+- Download the data via ```  download_data.py```  file. This will create and archive in your local directory. Unzip to create a folder data/ containing all the required data for this challenge. 
+-  Modify the file ``` regressor.py```  with your own regressor and inluding all the data feature engineering that you have done in the ``` feature_extractor.py ``` put them in ``` submissions/my_submission```  folder.
 
-``` ramp_test_submission --submission starting_kit```
+- Test locally in the staring_kit.ipynb notebook with the python command:
+``` ramp_test_submission --submission my_submission```
 - Once satisfied by the metric result, you can submit your code. 
 
 
