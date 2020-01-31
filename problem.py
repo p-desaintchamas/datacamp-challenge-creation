@@ -5,7 +5,7 @@ import rampwf as rw
 from rampwf.workflows import FeatureExtractorRegressor
 from rampwf.score_types.base import BaseScoreType
 from sklearn.model_selection import GroupShuffleSplit
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 
 problem_title = 'Prediction of daily validation in Paris public underground transports'
@@ -37,7 +37,8 @@ class VALID_error(BaseScoreType):
             y_true = y_true.values
         #max_true = np.maximum(5., np.log10(np.maximum(1., y_true)))
         #max_pred = np.maximum(5., np.log10(np.maximum(1., y_pred)))
-        loss = np.sqrt(mean_squared_error(y_true,y_pred))
+#         loss = np.sqrt(mean_squared_error(y_true,y_pred))
+        loss = (mean_absolute_error(y_true,y_pred))
         #loss = np.mean(np.log(np.abs(y_true - y_pred)))
         #loss = np.mean(np.abs(max_true - max_pred))
         return loss
