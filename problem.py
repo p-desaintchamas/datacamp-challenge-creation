@@ -35,11 +35,11 @@ class VALID_error(BaseScoreType):
     def __call__(self, y_true, y_pred):
         if isinstance(y_true, pd.Series):
             y_true = y_true.values
-        max_true = np.maximum(5., np.log10(np.maximum(1., y_true)))
-        max_pred = np.maximum(5., np.log10(np.maximum(1., y_pred)))
-        #loss = np.sqrt(mean_squared_error(y_true,y_pred))
+        #max_true = np.maximum(5., np.log10(np.maximum(1., y_true)))
+        #max_pred = np.maximum(5., np.log10(np.maximum(1., y_pred)))
+        loss = np.sqrt(mean_squared_error(y_true,y_pred))
         #loss = np.mean(np.log(y_true - y_pred)))
-        loss = np.mean(np.abs(max_true - max_pred))
+        #loss = np.mean(np.abs(max_true - max_pred))
         return loss
 
 score_types = [
